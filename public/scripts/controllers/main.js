@@ -31,10 +31,10 @@ function MainCtrl ($scope, pGraph, query, request, $timeout, $http, log, $uibMod
   vm.searchActivate = searchActivate;
   vm.searchDeactivate = searchDeactivate;
   vm.searchChange = searchChange;
+  vm.dragExample = dragExample;
 
   /* scope */
   $scope.drag = drag;
-  $scope.dragExample = dragExample;
   $scope.dragSearch = dragSearch;
   $scope.$on('newSettings', function(event, data) { vm.lastSearch = ''; });
   $scope.$on('tool', function(event, data) {
@@ -109,7 +109,7 @@ function MainCtrl ($scope, pGraph, query, request, $timeout, $http, log, $uibMod
           uselang: 'en',
           type: 'item',
           continue: '0',
-          limit: '20',
+          //limit: '20',
           search: input,
           origin: '*',
         }
@@ -139,8 +139,10 @@ function MainCtrl ($scope, pGraph, query, request, $timeout, $http, log, $uibMod
   }
 
   function dragExample (ev, type) {
-    ev.dataTransfer.setData("special", "example");
-    ev.dataTransfer.setData("type", type);
+    console.log(ev);
+    //ev.dataTransfer.setData("special", "example");
+    //ev.dataTransfer.setData("type", type);
+    vm.graph.createExample(type, $("#vqb-main .graph"));
   }
 
   function dragSearch (ev) {

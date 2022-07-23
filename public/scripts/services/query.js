@@ -25,7 +25,7 @@ function queryService (settings) {
   /* TODO: fix language filter and exact match for bif*/
   function search (keyword, type, limit, offset) {
     type = type || settings.searchClass.uri.value;
-    limit = limit || settings.resultLimit;
+    //limit = limit || settings.resultLimit;
     q  = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n' +
          'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n';
     if (settings.endpoint.type == 'fuseki')
@@ -39,14 +39,15 @@ function queryService (settings) {
         case 'virtuoso':
           q += '      ?label bif:contains "\'' + keyword + '\'" .\n';
           break;
-        case 'fuseki':
-          q += '      ?uri text:query (rdfs:label "' + keyword + '" '+ limit +') .\n';
-          break;
+      //  case 'fuseki':
+      //    q += '      ?uri text:query (rdfs:label "' + keyword + '" '+ limit +') .\n';
+      //    break;
         default:
           q += '      FILTER regex(?label, "' + keyword + '", "i")\n'
       }
     }
-    q += '  } LIMIT ' + limit;
+    q += ' } '
+    //q += '  } LIMIT ' + limit;
     if (offset) q += ' OFFSET ' + offset;
     q += '\n  }\n  OPTIONAL {\n';
     q += '  ?uri rdf:type ?type .\n';
@@ -61,7 +62,7 @@ function queryService (settings) {
     q += '  ?uri rdfs:label ?label .\n';
     q += '  FILTER (lang(?label) = "en")\n';
     q += '}'
-    if (limit)  q+= ' limit ' + limit;
+    //if (limit)  q+= ' limit ' + limit; 
     if (offset) q+= ' offset ' + offset;
     return header(['rdfs']) + q;
   }

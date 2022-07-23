@@ -35,6 +35,7 @@ function propertyGraphService (req, log, settings) {
     refresh: refresh,
     reset: reset,
     getSelected: getSelected,
+    createExample: createExample,
     // Defined elsewhere:
     describe: null,
     edit: null,
@@ -283,7 +284,7 @@ function propertyGraphService (req, log, settings) {
       return null;
     }
 
-    if (cfg.limit)  q.limit  = cfg.limit;
+    //if (cfg.limit)  q.limit  = cfg.limit;
     if (cfg.offset) q.offset = cfg.offset;
     return q;
   }
@@ -950,7 +951,7 @@ function propertyGraphService (req, log, settings) {
     });
 
     self.q += '}'
-    if (self.limit) self.q += ' LIMIT ' + self.limit;
+    //if (self.limit) self.q += ' LIMIT ' + self.limit;
     if (self.offset) self.q += ' OFFSET ' + self.offset;
 
     var h = '';

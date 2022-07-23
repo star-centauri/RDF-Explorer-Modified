@@ -1,0 +1,20 @@
+div#information
+    div.dropdown
+        button.btn.btn-info.dropdown-toggle(type="button", id="dropdownMenuButton", data-toggle="dropdown", aria-expanded="false") Example
+        div.dropdown-menu.custom-dropdown(aria-labelledby="dropdownMenuButton")
+            a.dropdown-item(href="", ng-click="main.dragExample($event, 'cats')") Cats
+            div.dropdown-divider
+            a.dropdown-item(href="", ng-click="main.dragExample($event, 'w3c')") W3C standards
+            div.dropdown-divider
+            a.dropdown-item(href="", ng-click="main.dragExample($event, 'mosquito')") Mosquito species
+            div.dropdown-divider
+            a.dropdown-item(href="", ng-click="main.dragExample($event, 'cancer')") Drugs for cancer that target genes related to cell proliferation
+
+    div.dropdown
+        button.btn.btn-warning.dropdown-toggle(type="button", id="dropdownMenuButton", data-toggle="dropdown", aria-expanded="false") Quick help
+        div.dropdown-menu.custom-dropdown(aria-labelledby="dropdownMenuButton")
+            a.dropdown-item(href="", ng-click="main.tutorial()") Interactive tutorial
+            div.dropdown-divider
+            a.dropdown-item(href="", ng-click="main.modalHelp()") Getting started
+
+    button.btn.btn-secondary(type="button", ng-click="main.toolToggle('help')") Asked question

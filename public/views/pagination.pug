@@ -1,0 +1,15 @@
+.form-row.mt-2.custom-container-pagination
+  span.pagination-label-entries Showing {{ ctrl.itemInitial }} to {{ ctrl.itemFinal }} of {{ ctrl.variable.results.length }} entries 
+
+  nav.table-responsive.mb-2.custom-scroll(aria-label="Page navigation")
+    ul.pagination(style="margin:0;")
+      li.page-item.custom-page-item
+        a(class="page-link", href="#", aria-label="Previous", class="{{ctrl.currentPagination == 1 ?  'disabled' : ''}}", ng-click="ctrl.updatePrevious()")
+          span(aria-hidden="true") &laquo;
+      
+      li.page-item.custom-page-item(ng-repeat="elem in ctrl.totalPagination", aria-current="{{ctrl.currentPagination == elem ? 'page' : 'null'}}", class="{{ctrl.currentPagination == elem ? 'active' : 'null'}}")
+        a(class="page-link", href="#", ng-click="ctrl.updateIndex(elem)") {{ elem }}
+      
+      li.page-item.custom-page-item
+        a(class="page-link", href="#", aria-label="Next", class="{{ctrl.currentPagination == ctrl.totalPagination.slice(-1) ?  'disabled' : ''}}", ng-click="ctrl.updateNext()")
+          span(aria-hidden="true") &raquo;

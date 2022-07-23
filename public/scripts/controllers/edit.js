@@ -6,6 +6,7 @@ function EditCtrl ($scope, pGraph, $timeout, $q) {
   var vm = this;
   vm.selected = null;
   vm.variable = null;
+  vm.data = [];
 
   vm.isVariable = true;
   vm.isConst    = false;
@@ -37,6 +38,12 @@ function EditCtrl ($scope, pGraph, $timeout, $q) {
   vm.refresh  = pGraph.refresh;
   vm.filters  = pGraph.filters;
 
+  // Paginação
+  vm.itemInitial = 1;
+  vm.itemFinal = 20;
+  vm.currentPagination = 1;
+  vm.totalPagination = [];
+
   function editResource (resource) {
     if (vm.selected != resource) {
       vm.resultFilterValue = '';
@@ -44,9 +51,11 @@ function EditCtrl ($scope, pGraph, $timeout, $q) {
     if (resource) {
       vm.selected   = resource;
       vm.variable   = resource.variable;
+      vm.variable.results = vm.variable.results.sort((a, b) => a.value.localeCompare(b.value));
       vm.isVariable = resource.isVariable();
       vm.isConst    = !vm.isVariable;
       vm.isLiteral  = !!(vm.selected.parent); //FIXME: check if this is a literal
+
       if (vm.isLiteral) {
         vm.newValueType = 'text';
         vm.newValuePlaceholder = 'add a new literal';
@@ -54,6 +63,7 @@ function EditCtrl ($scope, pGraph, $timeout, $q) {
         vm.newValueType = 'url';
         vm.newValuePlaceholder = 'add a new URI';
       }
+
       loadPreview();
     }
     $scope.$emit('tool', 'edit');
@@ -120,10 +130,12 @@ function EditCtrl ($scope, pGraph, $timeout, $q) {
     vm.canceller = $q.defer();
     vm.resultFilterLoading = true;
     var config = { //add pagination here
-      limit: 10,
+      //limit: 10,
       callback: () => { 
         vm.resultFilterLoading = false;
-        vm.canceller = null; },
+        vm.canceller = null; 
+        vm.dataPagination();
+      },
       canceller: vm.canceller.promise,
     };
 
@@ -145,7 +157,7 @@ function EditCtrl ($scope, pGraph, $timeout, $q) {
 
   function addSearchAsFilter () { // should work but not used
     var text = vm.resultFilterValue + '';
-    console.log(text);
+    
     var p = vm.selected.getPropByUri("http://www.w3.org/2000/01/rdf-schema#label");
     if (!p) {
       p = vm.selected.newProp();
@@ -159,6 +171,58 @@ function EditCtrl ($scope, pGraph, $timeout, $q) {
 
   function copyObj (obj) {
     return Object.assign({}, obj);
+  }
+
+  // Métodos de paginação
+  vm.dataPagination = function ( ) {
+    if( !vm.variable.results ) return;
+
+    let begin = vm.itemInitial - 1;
+    let end = vm.itemFinal - 1;  
+
+    let count = Math.ceil(vm.variable.results.length/20);
+    if ( count > 0 ) {
+      vm.totalPagination = Array(count).fill(null).map((_, i) => i+1);
+    }
+    
+    vm.data = vm.variable.results
+                .sort((a, b) => a.value.localeCompare(b.value))
+                .slice(begin, end);
+  }
+
+  vm.updatePrevious = function () {
+    if ( vm.currentPagination === 1 ) return;
+    
+    vm.currentPagination -= 1;
+    vm.itemInitial -= 20;
+    vm.itemFinal -= 20;
+
+    vm.data = vm.variable.results
+                .sort((a, b) => a.value.localeCompare(b.value))
+                .slice(vm.itemInitial-1, vm.itemFinal-1);
+  }
+
+  vm.updateNext = function () {
+    if ( vm.currentPagination === vm.totalPagination ) return;
+    
+    vm.currentPagination += 1;
+    vm.itemInitial += 20;
+    vm.itemFinal += 20;
+
+    vm.data = vm.variable.results
+                .sort((a, b) => a.value.localeCompare(b.value))
+                .slice(vm.itemInitial-1, vm.itemFinal-1);
+  }
+
+  vm.updateIndex = function ( indexPage ) {
+    vm.currentPagination = indexPage;
+
+    vm.itemInitial = 1 + (20 * (indexPage-1));
+    vm.itemFinal = 20 + (20 * (indexPage-1));
+
+    vm.data = vm.variable.results
+                .sort((a, b) => a.value.localeCompare(b.value))
+                .slice(vm.itemInitial-1, vm.itemFinal-1);
   }
 
 }

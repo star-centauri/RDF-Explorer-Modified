@@ -9,7 +9,7 @@ function SettingsCtrl (settings, request, query, $http, $scope) {
   vm.loading    = false;
   vm.endpoint   = null;
   vm.class      = null;
-  vm.limit      = 10;
+  //vm.limit      = 10;
 
   vm.getClasses = getClasses;
   vm.cancel     = getSettings;
@@ -21,14 +21,14 @@ function SettingsCtrl (settings, request, query, $http, $scope) {
   }
 
   function getSettings () {
-    vm.limit = settings.resultLimit;
+    //vm.limit = settings.resultLimit;
     vm.endpoint = Object.assign({}, settings.endpoint); //to copy the object.
     vm.class = Object.assign({}, settings.searchClass ); 
   }
   
   function setSettings () {
     if (vm.class.uri) settings.searchClass = vm.class;
-    if (vm.limit) settings.resultLimit = vm.limit;
+    //if (vm.limit) settings.resultLimit = vm.limit;
     if (vm.endpoint) settings.endpoint = vm.endpoint;
     $scope.$emit('newSettings', 1);
     getSettings();
